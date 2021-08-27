@@ -78,9 +78,9 @@ const RecentItemsCard: React.VFC = () => {
 
   const renderCategoria = (categoryId: string) => {
     const category = categories?.find((cat) => cat.id == categoryId)
-    return category ? (
+    return (
       <Chip
-        label={categories?.find((cat) => cat.id == categoryId)?.label}
+        label={category?.label ?? <CircularProgress size={'1em'} color={'warning'} />}
         sx={{
           cursor: 'pointer',
           maxWidth: '100px',
@@ -88,10 +88,8 @@ const RecentItemsCard: React.VFC = () => {
           whiteSpace: 'nowrap',
         }}
         variant={'outlined'}
-        onClick={() => dispatch(setCurrentCategorySuccess(category))}
+        onClick={() => category && dispatch(setCurrentCategorySuccess(category))}
       />
-    ) : (
-      ''
     )
   }
 
