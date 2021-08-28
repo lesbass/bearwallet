@@ -80,7 +80,7 @@ const RecentItemsCard: React.VFC = () => {
     const category = categories?.find((cat) => cat.id == categoryId)
     return (
       <Chip
-        label={category?.label ?? <CircularProgress size={'1em'} color={'warning'} />}
+        label={category?.label ?? <CircularProgress color={'warning'} size={'1em'} />}
         sx={{
           cursor: 'pointer',
           maxWidth: '100px',
