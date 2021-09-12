@@ -1,6 +1,5 @@
 import memoryCache, { CacheClass } from 'memory-cache'
 
-import { Project } from 'interfaces/NotionModels'
 import log from 'lib/log'
 import api from 'lib/notion-client'
 

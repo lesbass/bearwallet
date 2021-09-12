@@ -296,14 +296,28 @@ export const initApi = (): NotionClient => ({
     await getPageOfItems()
     return ids
   },
-  async getLatestItems() {
+  async getLatestItems(category: string | null, page: number) {
     const items: Movement[] = []
     const { movement_database_id } = await notionDatabaseIds()
-    log('INFO', 'Reading latest items from Notion API', 'api')
+    log('INFO', `Reading latest items from Notion API for category ${category}, page ${page}`, 'api')
+    let pageNumber = page
 
-    async function getPageOfItems() {
-      let request_payload: RequestParameters = {
-        body: {
+    async function getPageOfItems(cursor: string | undefined = undefined) {
+      let request_payload: RequestParameters
+
+      if (cursor == undefined) {
+        const filter = category
+          ? {
+              filter: {
+                property: 'Categoria',
+                relation: {
+                  contains: category,
+                },
+              },
+            }
+          : {}
+
+        const body = {
           page_size: 10,
           sorts: [
             {
@@ -311,28 +325,50 @@ export const initApi = (): NotionClient => ({
               property: 'Data',
             },
           ],
-        },
-        method: 'post',
-        path: 'databases/' + movement_database_id + '/query',
+        }
+
+        request_payload = {
+          body: {
+            ...body,
+            ...filter,
+          },
+          method: 'post',
+          path: 'databases/' + movement_database_id + '/query',
+        }
+      } else {
+        request_payload = {
+          body: {
+            start_cursor: cursor,
+          },
+          method: 'post',
+          path: 'databases/' + movement_database_id + '/query',
+        }
       }
 
       const current_pages = await notion.request<MovementResultList>(request_payload)
 
-      for (const result of current_pages.results) {
-        const title = result.properties.Descrizione.title[0]
-        const descrizione = title === undefined ? '' : title.plain_text
-        const categoryId = result.properties.Categoria.relation[0]?.id ?? '-'
-        const projectIds = result.properties.Progetto.relation.map((project) => project.id)
+      const requestedPage = --pageNumber == 0
 
-        items.push(<Movement>{
-          categoryId,
-          date: result.properties.Data.date.start,
-          description: descrizione,
-          id: result.id,
-          projectIds: projectIds,
-          url: result.url,
-          value: result.properties['Dare/Avere (€)'].formula.number,
-        })
+      if (requestedPage)
+        for (const result of current_pages.results) {
+          const title = result.properties.Descrizione.title[0]
+          const descrizione = title === undefined ? '' : title.plain_text
+          const categoryId = result.properties.Categoria.relation[0]?.id ?? '-'
+          const projectIds = result.properties.Progetto.relation.map((project) => project.id)
+
+          items.push(<Movement>{
+            categoryId,
+            date: result.properties.Data.date.start,
+            description: descrizione,
+            id: result.id,
+            projectIds: projectIds,
+            url: result.url,
+            value: result.properties['Dare/Avere (€)'].formula.number,
+          })
+        }
+
+      if (!requestedPage && current_pages.has_more) {
+        await getPageOfItems(current_pages.next_cursor)
       }
     }
 

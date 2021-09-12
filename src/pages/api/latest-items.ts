@@ -8,21 +8,16 @@ import withSession from 'lib/session'
 
 const memCache: CacheClass<string, Movement[]> = memoryCache
 
-const getOrSetData = async (refresh = false) => {
-  const cacheKey = 'getLatestItems'
+const getOrSetData = async (category: string | null, page: number, refresh = false) => {
+  const cacheKey = 'getLatestItems-' + category + '-' + page
   const timeInMinutes = 120
-
-  if (refresh) {
-    memoryCache.clear()
-    log('INFO', 'reset cache', 'api.getLatestItems.getOrSetData')
-  }
 
   let cachedData = memCache.get(cacheKey)
   if (!cachedData || refresh) {
-    cachedData = await api.getLatestItems(false)
+    cachedData = await api.getLatestItems(category, page, refresh)
     memCache.put(cacheKey, cachedData, timeInMinutes * 60 * 1000)
   } else {
-    log('INFO', 'cached data found', 'api.getLatestItems.getOrSetData')
+    log('INFO', 'cached data found -> ' + cacheKey, 'api.getLatestItems.getOrSetData')
   }
 
   return cachedData
@@ -31,7 +26,7 @@ const getOrSetData = async (refresh = false) => {
 export default withSession(async (request, response) => {
   const user = request.session.get<User>('user')
   if (user?.isLoggedIn !== true) {
-    log('ERROR', 'Method not allowed', 'api.getLatestNotesForCategory')
+    log('ERROR', 'Method not allowed', 'api.getLatestItems')
     response.status(405).send('')
     return
   }
@@ -40,8 +35,8 @@ export default withSession(async (request, response) => {
     if (request.method?.toUpperCase() === 'POST') {
       response.setHeader('content-type', 'application/json')
 
-      const { refresh } = request.body
-      const data = await getOrSetData(refresh)
+      const { category, page, refresh } = request.body
+      const data = await getOrSetData(category, page, refresh)
       response.status(200).send(data)
     } else {
       log('ERROR', 'Method not allowed', 'api.getLatestItems')

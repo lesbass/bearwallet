@@ -29,8 +29,8 @@ import { useAppDispatch } from 'lib/useAppDispatch'
 import { renderIcon, renderValore as renderValoreWithHide } from 'lib/utils'
 import { getCategories, getCurrentCategory } from 'store/category/category.selectors'
 import { setCurrentCategorySuccess } from 'store/category/category.store'
-import { setLastItems } from 'store/lastItems/lastItems.actions'
-import { getLastItems } from 'store/lastItems/lastItems.selectors'
+import { resetLastItems, setLastItems } from 'store/lastItems/lastItems.actions'
+import { retrieveLastItems } from 'store/lastItems/lastItems.selectors'
 import { getProjects } from 'store/project/project.selectors'
 import { getHideValues } from 'store/settings/settings.selectors'
 import { setHideValuesSuccess } from 'store/settings/settings.store'
@@ -39,11 +39,22 @@ const RecentItemsCard: React.VFC = () => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation('recentItems')
 
-  const items = useSelector(getLastItems)
   const categories = useSelector(getCategories)
   const projects = useSelector(getProjects)
   const hideValues = useSelector(getHideValues)
   const currentCategory = useSelector(getCurrentCategory)
+
+  let items: Movement[] | null = null
+  const allItems = useSelector(retrieveLastItems)
+  const itemsFilter = { category: currentCategory ? currentCategory.id : null, page: 1 }
+  const filteredItems = allItems?.filter(
+    (row) => row.page === itemsFilter.page && row.category === itemsFilter.category,
+  )
+  if (!filteredItems || !filteredItems.length) {
+    dispatch(setLastItems(itemsFilter))
+  } else {
+    items = filteredItems[0].data
+  }
 
   const renderValore = (val: number) => renderValoreWithHide(val, hideValues)
 
@@ -121,32 +132,38 @@ const RecentItemsCard: React.VFC = () => {
     if (!projectIds.length) return <></>
 
     const itemProjects = projectIds.map((projectId) => projects?.find((prj) => prj.id == projectId))
-    const title = itemProjects
+    const projectTitle = itemProjects
       .map((prj) => prj?.label ?? '')
       .filter(Boolean)
       .join(', ')
     return (
       <>
-        <div style={{ color: '#dddddd', fontSize: '0.8em', fontVariant: 'small-caps' }} title={title}>
-          <span style={{ color: '#8fcaf9' }}>{'➹'}</span> {title}
+        <div style={{ color: '#dddddd', fontSize: '0.8em', fontVariant: 'small-caps' }} title={projectTitle}>
+          <span style={{ color: '#8fcaf9' }}>{'➹'}</span> {projectTitle}
         </div>
       </>
     )
   }
 
-  const title = currentCategory
-    ? <>{t('title') + ': '}
-      <Chip avatar={<Avatar>{renderIcon(currentCategory.icon)}</Avatar>}
-            color='primary'
-            label={currentCategory.label} /></>
-    : t('title')
+  const title = currentCategory ? (
+    <>
+      {t('title') + ': '}
+      <Chip
+        avatar={<Avatar>{renderIcon(currentCategory.icon)}</Avatar>}
+        color='primary'
+        label={currentCategory.label}
+      />
+    </>
+  ) : (
+    t('title')
+  )
 
   const cardHeader = () => (
     <CardHeader
       action={
         <>
           {!!items && (
-            <IconButton aria-label='settings' onClick={() => dispatch(setLastItems(true))}>
+            <IconButton aria-label='settings' onClick={() => dispatch(resetLastItems(true))}>
               <ReplayIcon sx={{ cursor: 'pointer', float: 'right' }} />
             </IconButton>
           )}
@@ -166,7 +183,7 @@ const RecentItemsCard: React.VFC = () => {
     <StyledTableRow key={index}>
       <StyledTableCell>{renderData(item.date)}</StyledTableCell>
       <StyledTableCell sx={{ whiteSpace: 'nowrap' }}>{renderValore(item.value)}</StyledTableCell>
-      <StyledTableCell>{renderCategoria(item.categoryId)}</StyledTableCell>
+      {!currentCategory && <StyledTableCell>{renderCategoria(item.categoryId)}</StyledTableCell>}
       <StyledTableCell>
         {renderProgetti(item.projectIds)}
         <Link
@@ -187,6 +204,17 @@ const RecentItemsCard: React.VFC = () => {
     </StyledTableRow>
   )
 
+  const renderLoader = () => {
+    const colSpan = currentCategory ? 3 : 4
+    return (
+      <StyledTableRow>
+        <StyledTableCell align={'center'} colSpan={colSpan} sx={{ padding: '30px' }}>
+          <CircularProgress />
+        </StyledTableCell>
+      </StyledTableRow>
+    )
+  }
+
   return (
     <Card style={{ backgroundColor: '#051821', marginBottom: '20px' }}>
       {cardHeader()}
@@ -196,20 +224,14 @@ const RecentItemsCard: React.VFC = () => {
             <TableRow>
               <StyledTableCell>{t('table_date')}</StyledTableCell>
               <StyledTableCell>{t('table_value')}</StyledTableCell>
-              <StyledTableCell>{t('table_category')}</StyledTableCell>
+              {!currentCategory && <StyledTableCell>{t('table_category')}</StyledTableCell>}
               <StyledTableCell>{t('table_description')}</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {!!items ? (
               items.map(tableRow)
-            ) : (
-              <StyledTableRow>
-                <StyledTableCell align={'center'} colSpan={4} sx={{ padding: '30px' }}>
-                  <CircularProgress />
-                </StyledTableCell>
-              </StyledTableRow>
-            )}
+            ) : renderLoader()}
           </TableBody>
         </Table>
       </TableContainer>

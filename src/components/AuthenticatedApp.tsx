@@ -17,7 +17,7 @@ const AuthenticatedApp: React.VFC = () => {
   useEffect(() => {
     dispatch(setCategories())
     dispatch(setProjects())
-    dispatch(setLastItems(false))
+    dispatch(setLastItems({ category: null, page: 1 }))
   }, [dispatch])
 
   return (
