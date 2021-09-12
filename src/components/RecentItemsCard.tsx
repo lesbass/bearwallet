@@ -67,11 +67,15 @@ const RecentItemsCard: React.VFC = () => {
       }
       return (
         <>
-          <b style={{
-            fontSize: 11,
-            fontWeight: 'normal',
-            lineHeight: '15px',
-          }}>{dateParsed.format('ddd').toUpperCase()}</b>
+          <b
+            style={{
+              fontSize: 11,
+              fontWeight: 'normal',
+              lineHeight: '15px',
+            }}
+          >
+            {dateParsed.format('ddd').toUpperCase()}
+          </b>
           <br />
           {dateParsed.format('DD/MM')}
         </>
@@ -88,7 +92,7 @@ const RecentItemsCard: React.VFC = () => {
           textAlign: 'center',
           width: 32,
         }}
-        variant='rounded'
+        variant="rounded"
       >
         <Box display={'block'}>{printDate()}</Box>
       </Avatar>
@@ -134,7 +138,7 @@ const RecentItemsCard: React.VFC = () => {
       action={
         <>
           {!!items && (
-            <IconButton aria-label='settings' onClick={() => dispatch(setLastItems(true))}>
+            <IconButton aria-label="settings" onClick={() => dispatch(setLastItems(true))}>
               <ReplayIcon sx={{ cursor: 'pointer', float: 'right' }} />
             </IconButton>
           )}
@@ -158,7 +162,7 @@ const RecentItemsCard: React.VFC = () => {
       <StyledTableCell>
         {renderProgetti(item.projectIds)}
         <Link
-          color='inherit'
+          color="inherit"
           href={item.url}
           rel={'noreferrer'}
           sx={{
@@ -179,7 +183,7 @@ const RecentItemsCard: React.VFC = () => {
     <Card style={{ backgroundColor: '#051821', marginBottom: '20px' }}>
       {cardHeader()}
       <TableContainer component={CardContent}>
-        <Table size='small'>
+        <Table size="small">
           <TableHead>
             <TableRow>
               <StyledTableCell>{t('table_date')}</StyledTableCell>
