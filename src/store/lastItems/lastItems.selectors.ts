@@ -1,5 +1,5 @@
 import { RootState } from 'pages'
 
-export const getLastItems = (state: RootState) => {
+export const retrieveLastItems = (state: RootState) => {
   return state.lastItems.data
 }

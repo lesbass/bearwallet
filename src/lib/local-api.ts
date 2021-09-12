@@ -5,6 +5,7 @@ import { Gateway } from 'lib/interfaces/gateway'
 
 type ApiClient = Gateway & {
   logOutUser: () => Promise<void>
+  resetCache: () => Promise<void>
 }
 
 export const initApi = (): ApiClient => ({
@@ -20,8 +21,8 @@ export const initApi = (): ApiClient => ({
   async getCategories() {
     return axios.post<Category[]>('/api/category').then((res) => res.data)
   },
-  async getLatestItems(refresh = false) {
-    return axios.post<Movement[]>('/api/latest-items', { refresh }).then((res) => res.data)
+  async getLatestItems(category: string | null, page: number, refresh: boolean) {
+    return axios.post<Movement[]>('/api/latest-items', { category, page, refresh }).then((res) => res.data)
   },
   async getLatestNotesForCategory(category, refresh = false) {
     return axios.post<string[]>(`/api/notes-for-category/${category}`, { refresh }).then((res) => res.data)
@@ -34,6 +35,9 @@ export const initApi = (): ApiClient => ({
   },
   async logOutUser() {
     return axios.post('/api/logout')
+  },
+  async resetCache() {
+    return axios.post('/api/reset-cache')
   },
 })
 

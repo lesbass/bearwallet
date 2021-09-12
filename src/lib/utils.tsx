@@ -1,3 +1,4 @@
+import memoryCache from 'memory-cache'
 import React from 'react'
 
 import { Icon } from 'interfaces/NotionModels'
@@ -42,4 +43,8 @@ export function renderValore(val: number, hideValues: boolean) {
       <b style={{ color: color }}>{symbol}</b> {valore}
     </>
   )
+}
+
+export function resetCache() {
+  memoryCache.clear()
 }
