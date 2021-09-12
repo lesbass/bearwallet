@@ -133,22 +133,22 @@ const InputForm: React.VFC = () => {
         title={
           <>
             {t('title') + ': '}
-            <Chip avatar={<Avatar>{renderIcon(category.icon)}</Avatar>} color='primary' label={category.label} />
+            <Chip avatar={<Avatar>{renderIcon(category.icon)}</Avatar>} color="primary" label={category.label} />
           </>
         }
         titleTypographyProps={{ variant: 'h6' }}
       />
       <CardContent>
-        <Box noValidate autoComplete='off' component='form' onKeyDown={onKeyDown}>
+        <Box noValidate autoComplete="off" component="form" onKeyDown={onKeyDown}>
           <Grid container spacing={2} sx={{ marginTop: '10px' }}>
             <Grid item xs={6}>
               <FormControl fullWidth>
-                <InputLabel htmlFor='data'>{t('date')}</InputLabel>
+                <InputLabel htmlFor="data">{t('date')}</InputLabel>
                 <Input
                   required
                   error={dateError}
-                  id='data'
-                  type='date'
+                  id="data"
+                  type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
                   onFocus={() => setDateError(false)}
@@ -157,14 +157,14 @@ const InputForm: React.VFC = () => {
             </Grid>
             <Grid item xs={6}>
               <FormControl fullWidth>
-                <InputLabel htmlFor='importo'>{t('value')}</InputLabel>
+                <InputLabel htmlFor="importo">{t('value')}</InputLabel>
                 <Input
                   autoFocus
                   required
                   error={importoError}
-                  id='importo'
-                  startAdornment={<InputAdornment position='start'>&euro;</InputAdornment>}
-                  type='number'
+                  id="importo"
+                  startAdornment={<InputAdornment position="start">&euro;</InputAdornment>}
+                  type="number"
                   value={importo ?? ''}
                   onChange={(e) => setImporto(+e.target.value)}
                   onFocus={() => setImportoError(false)}
@@ -174,7 +174,7 @@ const InputForm: React.VFC = () => {
             <Grid item xs={12}>
               <Autocomplete
                 freeSolo
-                id='descrizione'
+                id="descrizione"
                 loading={loading}
                 loadingText={t('loading')}
                 open={open}
@@ -188,7 +188,7 @@ const InputForm: React.VFC = () => {
                       endAdornment: <>{params.InputProps.endAdornment}</>,
                     }}
                     label={t('notes')}
-                    variant='standard'
+                    variant="standard"
                     onChange={(e) => setNote(e.target.value)}
                   />
                 )}
@@ -209,17 +209,17 @@ const InputForm: React.VFC = () => {
             </Grid>
           </Grid>
 
-          <Stack direction='row' spacing={2} sx={{ marginTop: '20px' }}>
+          <Stack direction="row" spacing={2} sx={{ marginTop: '20px' }}>
             <LoadingButton
-              color='primary'
-              loadingPosition='start'
+              color="primary"
+              loadingPosition="start"
               startIcon={<SaveIcon />}
-              variant='contained'
+              variant="contained"
               onClick={submitForm}
             >
               {t('save')}
             </LoadingButton>
-            <Button color='secondary' startIcon={<ClearIcon />} variant='contained' onClick={dismissForm}>
+            <Button color="secondary" startIcon={<ClearIcon />} variant="contained" onClick={dismissForm}>
               {t('cancel')}
             </Button>
           </Stack>

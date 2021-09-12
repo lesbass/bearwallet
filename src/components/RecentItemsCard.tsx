@@ -16,16 +16,18 @@ import {
 } from '@material-ui/core'
 import { blueGrey, grey } from '@material-ui/core/colors'
 import { Visibility, VisibilityOff } from '@material-ui/icons'
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import ListIcon from '@material-ui/icons/List'
 import ReplayIcon from '@material-ui/icons/Replay'
+import { LoadingButton } from '@material-ui/lab'
 import moment from 'moment'
 import useTranslation from 'next-translate/useTranslation'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Movement } from 'interfaces/NotionModels'
 import { StyledTableCell, StyledTableRow } from 'lib/styledTable'
-import { useAppDispatch } from 'lib/useAppDispatch'
+import { useAppDispatch, useAppThunkDispatch } from 'lib/useAppDispatch'
 import { renderIcon, renderValore as renderValoreWithHide } from 'lib/utils'
 import { getCategories, getCurrentCategory } from 'store/category/category.selectors'
 import { setCurrentCategorySuccess } from 'store/category/category.store'
@@ -37,18 +39,35 @@ import { setHideValuesSuccess } from 'store/settings/settings.store'
 
 const RecentItemsCard: React.VFC = () => {
   const dispatch = useAppDispatch()
+  const thunkDispatch = useAppThunkDispatch()
   const { t } = useTranslation('recentItems')
+
+  const [currentPage, setCurrentPage] = useState(1)
+  const [loadingPage, setLoadingPage] = useState(false)
+  let items: Movement[] | undefined = undefined
 
   const categories = useSelector(getCategories)
   const projects = useSelector(getProjects)
   const hideValues = useSelector(getHideValues)
   const currentCategory = useSelector(getCurrentCategory)
 
-  let items: Movement[] | null = null
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [currentCategory])
+
+  const loadMore = () => {
+    setLoadingPage(true)
+    const nextPage = currentPage + 1
+    thunkDispatch(setLastItems({ category: currentCategory ? currentCategory.id : null, page: nextPage })).then(() => {
+      setCurrentPage(nextPage)
+      setLoadingPage(false)
+    })
+  }
+
   const allItems = useSelector(retrieveLastItems)
-  const itemsFilter = { category: currentCategory ? currentCategory.id : null, page: 1 }
+  const itemsFilter = { category: currentCategory ? currentCategory.id : null, page: currentPage }
   const filteredItems = allItems?.filter(
-    (row) => row.page === itemsFilter.page && row.category === itemsFilter.category,
+    (row) => row.page === itemsFilter.page && row.category === itemsFilter.category
   )
   if (!filteredItems || !filteredItems.length) {
     dispatch(setLastItems(itemsFilter))
@@ -67,8 +86,8 @@ const RecentItemsCard: React.VFC = () => {
       dateColorIndex = dateColorIndex === 0 ? 1 : 0
       prevDate = data
     }
-    const isToday = dateParsed.date() === moment().date()
-    const isYesterday = dateParsed.date() + 1 === moment().date()
+    const isToday = dateParsed.isSame(moment(), 'day')
+    const isYesterday = dateParsed.add(1, 'day').isSame(moment(), 'day')
 
     const printDate = () => {
       if (isToday) {
@@ -104,7 +123,7 @@ const RecentItemsCard: React.VFC = () => {
           textAlign: 'center',
           width: 32,
         }}
-        variant='rounded'
+        variant="rounded"
       >
         <Box display={'block'}>{printDate()}</Box>
       </Avatar>
@@ -150,7 +169,7 @@ const RecentItemsCard: React.VFC = () => {
       {t('title') + ': '}
       <Chip
         avatar={<Avatar>{renderIcon(currentCategory.icon)}</Avatar>}
-        color='primary'
+        color="primary"
         label={currentCategory.label}
       />
     </>
@@ -158,12 +177,17 @@ const RecentItemsCard: React.VFC = () => {
     t('title')
   )
 
+  const reset = () => {
+    dispatch(resetLastItems(true))
+    setCurrentPage(1)
+  }
+
   const cardHeader = () => (
     <CardHeader
       action={
         <>
           {!!items && (
-            <IconButton aria-label='settings' onClick={() => dispatch(resetLastItems(true))}>
+            <IconButton aria-label="settings" onClick={reset}>
               <ReplayIcon sx={{ cursor: 'pointer', float: 'right' }} />
             </IconButton>
           )}
@@ -187,7 +211,7 @@ const RecentItemsCard: React.VFC = () => {
       <StyledTableCell>
         {renderProgetti(item.projectIds)}
         <Link
-          color='inherit'
+          color="inherit"
           href={item.url}
           rel={'noreferrer'}
           sx={{
@@ -219,7 +243,7 @@ const RecentItemsCard: React.VFC = () => {
     <Card style={{ backgroundColor: '#051821', marginBottom: '20px' }}>
       {cardHeader()}
       <TableContainer component={CardContent}>
-        <Table size='small'>
+        <Table size="small">
           <TableHead>
             <TableRow>
               <StyledTableCell>{t('table_date')}</StyledTableCell>
@@ -228,13 +252,17 @@ const RecentItemsCard: React.VFC = () => {
               <StyledTableCell>{t('table_description')}</StyledTableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {!!items ? (
-              items.map(tableRow)
-            ) : renderLoader()}
-          </TableBody>
+          <TableBody>{!!items ? items.map(tableRow) : renderLoader()}</TableBody>
         </Table>
       </TableContainer>
+
+      {items && (
+        <Box sx={{ marginBottom: '20px' }} textAlign={'center'} onClick={loadMore}>
+          <LoadingButton loading={loadingPage} size="small" startIcon={<ArrowDownwardIcon />} variant={'outlined'}>
+            {t('load_more')}
+          </LoadingButton>
+        </Box>
+      )}
     </Card>
   )
 }

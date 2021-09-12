@@ -5,5 +5,6 @@
   "table_category": "Categoria",
   "table_description": "Descrizione",
   "today": "OGGI",
-  "yesterday": "IERI"
+  "yesterday": "IERI",
+  "load_more": "Carica altri elementi"
 }
