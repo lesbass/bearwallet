@@ -26,8 +26,8 @@ import { useSelector } from 'react-redux'
 import { Movement } from 'interfaces/NotionModels'
 import { StyledTableCell, StyledTableRow } from 'lib/styledTable'
 import { useAppDispatch } from 'lib/useAppDispatch'
-import { renderValore as renderValoreWithHide } from 'lib/utils'
-import { getCategories } from 'store/category/category.selectors'
+import { renderIcon, renderValore as renderValoreWithHide } from 'lib/utils'
+import { getCategories, getCurrentCategory } from 'store/category/category.selectors'
 import { setCurrentCategorySuccess } from 'store/category/category.store'
 import { setLastItems } from 'store/lastItems/lastItems.actions'
 import { getLastItems } from 'store/lastItems/lastItems.selectors'
@@ -43,6 +43,7 @@ const RecentItemsCard: React.VFC = () => {
   const categories = useSelector(getCategories)
   const projects = useSelector(getProjects)
   const hideValues = useSelector(getHideValues)
+  const currentCategory = useSelector(getCurrentCategory)
 
   const renderValore = (val: number) => renderValoreWithHide(val, hideValues)
 
@@ -92,7 +93,7 @@ const RecentItemsCard: React.VFC = () => {
           textAlign: 'center',
           width: 32,
         }}
-        variant="rounded"
+        variant='rounded'
       >
         <Box display={'block'}>{printDate()}</Box>
       </Avatar>
@@ -133,12 +134,19 @@ const RecentItemsCard: React.VFC = () => {
     )
   }
 
+  const title = currentCategory
+    ? <>{t('title') + ': '}
+      <Chip avatar={<Avatar>{renderIcon(currentCategory.icon)}</Avatar>}
+            color='primary'
+            label={currentCategory.label} /></>
+    : t('title')
+
   const cardHeader = () => (
     <CardHeader
       action={
         <>
           {!!items && (
-            <IconButton aria-label="settings" onClick={() => dispatch(setLastItems(true))}>
+            <IconButton aria-label='settings' onClick={() => dispatch(setLastItems(true))}>
               <ReplayIcon sx={{ cursor: 'pointer', float: 'right' }} />
             </IconButton>
           )}
@@ -149,7 +157,7 @@ const RecentItemsCard: React.VFC = () => {
       }
       avatar={<ListIcon />}
       sx={{ paddingBottom: 0 }}
-      title={t('title')}
+      title={title}
       titleTypographyProps={{ variant: 'h6' }}
     />
   )
@@ -162,7 +170,7 @@ const RecentItemsCard: React.VFC = () => {
       <StyledTableCell>
         {renderProgetti(item.projectIds)}
         <Link
-          color="inherit"
+          color='inherit'
           href={item.url}
           rel={'noreferrer'}
           sx={{
@@ -183,7 +191,7 @@ const RecentItemsCard: React.VFC = () => {
     <Card style={{ backgroundColor: '#051821', marginBottom: '20px' }}>
       {cardHeader()}
       <TableContainer component={CardContent}>
-        <Table size="small">
+        <Table size='small'>
           <TableHead>
             <TableRow>
               <StyledTableCell>{t('table_date')}</StyledTableCell>
