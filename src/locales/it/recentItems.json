@@ -3,5 +3,7 @@
   "table_date": "Data",
   "table_value": "Valore",
   "table_category": "Categoria",
-  "table_description": "Descrizione"
+  "table_description": "Descrizione",
+  "today": "OGGI",
+  "yesterday": "IERI"
 }
