@@ -125,7 +125,7 @@ const RecentItemsCard: React.VFC = () => {
           textAlign: 'center',
           width: 32,
         }}
-        variant="rounded"
+        variant='rounded'
       >
         <Box display={'block'}>{printDate()}</Box>
       </Avatar>
@@ -171,7 +171,7 @@ const RecentItemsCard: React.VFC = () => {
       {`${t('title')}: `}
       <Chip
         avatar={<Avatar>{renderIcon(currentCategory.icon)}</Avatar>}
-        color="primary"
+        color='primary'
         label={currentCategory.label}
       />
     </>
@@ -179,11 +179,12 @@ const RecentItemsCard: React.VFC = () => {
     t('title')
   )
 
-  const reset = () => {
-    thunkDispatch(resetLastItems()).then(() => setCurrentPage(1))
-    currentCategory && dispatch(setNotes({ category: currentCategory.id, refresh: true }))
+  const reset = async () => {
+    await thunkDispatch(resetLastItems())
+    await thunkDispatch(resetCategories())
 
-    thunkDispatch(resetCategories())
+    currentCategory && dispatch(setNotes({ category: currentCategory.id, refresh: true }))
+    setCurrentPage(1)
   }
 
   const cardHeader = () => (
@@ -191,7 +192,7 @@ const RecentItemsCard: React.VFC = () => {
       action={
         <>
           {!!items && (
-            <IconButton aria-label="settings" onClick={reset}>
+            <IconButton aria-label='settings' onClick={reset}>
               <ReplayIcon sx={{ cursor: 'pointer', float: 'right' }} />
             </IconButton>
           )}
@@ -215,7 +216,7 @@ const RecentItemsCard: React.VFC = () => {
       <StyledTableCell>
         {renderProgetti(item.projectIds)}
         <Link
-          color="inherit"
+          color='inherit'
           href={item.url}
           rel={'noreferrer'}
           sx={{
@@ -247,7 +248,7 @@ const RecentItemsCard: React.VFC = () => {
     <Card style={{ backgroundColor: '#051821', marginBottom: '20px' }}>
       {cardHeader()}
       <TableContainer component={CardContent}>
-        <Table size="small">
+        <Table size='small'>
           <TableHead>
             <TableRow>
               <StyledTableCell>{t('table_date')}</StyledTableCell>
@@ -262,7 +263,7 @@ const RecentItemsCard: React.VFC = () => {
 
       {items && (
         <Box sx={{ marginBottom: '20px' }} textAlign={'center'} onClick={loadMore}>
-          <LoadingButton loading={loadingPage} size="small" startIcon={<ArrowDownwardIcon />} variant={'outlined'}>
+          <LoadingButton loading={loadingPage} size='small' startIcon={<ArrowDownwardIcon />} variant={'outlined'}>
             {t('load_more')}
           </LoadingButton>
         </Box>
