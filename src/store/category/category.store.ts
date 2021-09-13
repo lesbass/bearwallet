@@ -9,7 +9,7 @@ export const CategoryStore = createSlice({
   },
   name: 'client',
   reducers: {
-    setCategoriesSuccess(state, action: PayloadAction<Category[]>) {
+    setCategoriesSuccess(state, action: PayloadAction<Category[] | undefined>) {
       state.data = action.payload
     },
     setCurrentCategorySuccess(state, action: PayloadAction<Category | null>) {

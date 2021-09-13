@@ -29,10 +29,12 @@ import { Movement } from 'interfaces/NotionModels'
 import { StyledTableCell, StyledTableRow } from 'lib/styledTable'
 import { useAppDispatch, useAppThunkDispatch } from 'lib/useAppDispatch'
 import { renderIcon, renderValore as renderValoreWithHide } from 'lib/utils'
+import { resetCategories } from 'store/category/category.actions'
 import { getCategories, getCurrentCategory } from 'store/category/category.selectors'
 import { setCurrentCategorySuccess } from 'store/category/category.store'
 import { resetLastItems, setLastItems } from 'store/lastItems/lastItems.actions'
 import { retrieveLastItems } from 'store/lastItems/lastItems.selectors'
+import { setNotes } from 'store/note/note.actions'
 import { getProjects } from 'store/project/project.selectors'
 import { getHideValues } from 'store/settings/settings.selectors'
 import { setHideValuesSuccess } from 'store/settings/settings.store'
@@ -166,7 +168,7 @@ const RecentItemsCard: React.VFC = () => {
 
   const title = currentCategory ? (
     <>
-      {t('title') + ': '}
+      {`${t('title')}: `}
       <Chip
         avatar={<Avatar>{renderIcon(currentCategory.icon)}</Avatar>}
         color="primary"
@@ -178,8 +180,10 @@ const RecentItemsCard: React.VFC = () => {
   )
 
   const reset = () => {
-    dispatch(resetLastItems(true))
-    setCurrentPage(1)
+    thunkDispatch(resetLastItems()).then(() => setCurrentPage(1))
+    currentCategory && dispatch(setNotes({ category: currentCategory.id, refresh: true }))
+
+    thunkDispatch(resetCategories())
   }
 
   const cardHeader = () => (

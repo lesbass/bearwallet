@@ -82,7 +82,7 @@ const InputForm: React.VFC = () => {
         })
         .then(() => {
           dispatch(setProcessingSuccess(false))
-          dispatch(resetLastItems(true))
+          dispatch(resetLastItems())
           dispatch(setNotes({ category: category.id, refresh: true }))
         })
         .catch((err) => {

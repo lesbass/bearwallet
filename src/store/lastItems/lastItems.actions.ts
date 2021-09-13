@@ -4,27 +4,18 @@ import api from 'lib/local-api'
 import { setHttpStatus } from 'store/http-status/http-status.store'
 
 import { resetLastItemsSuccess, setLastItemsSuccess } from './lastItems.store'
-import { Movement } from '../../interfaces/NotionModels'
+import { Movement } from 'interfaces/NotionModels'
 
-export const resetLastItems = createAsyncThunk<boolean, boolean>(
-  'lastItems/resetLastItems',
-  async (payload, { dispatch, rejectWithValue }) => {
-    try {
-      if (payload) {
-        dispatch(resetLastItemsSuccess())
-        await api.resetCache()
-      }
+export const resetLastItems = createAsyncThunk('lastItems/resetLastItems', async (_, { dispatch, rejectWithValue }) => {
+  try {
+    dispatch(resetLastItemsSuccess())
+    await api.resetCache()
+  } catch (err) {
+    dispatch(setHttpStatus({ actionType: 'resetLastItems', status: 'error' }))
 
-      dispatch(setLastItems({ category: null, page: 1 }))
-
-      return payload
-    } catch (err) {
-      dispatch(setHttpStatus({ actionType: 'resetLastItems', status: 'error' }))
-
-      return rejectWithValue('resetLastItems fails!')
-    }
+    return rejectWithValue('resetLastItems fails!')
   }
-)
+})
 
 export const setLastItems = createAsyncThunk<Movement[], { category: string | null; page: number }>(
   'lastItems/setLastItems',
