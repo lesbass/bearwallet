@@ -28,7 +28,7 @@ export const resetCategories = createAsyncThunk(
   async (_, { dispatch, rejectWithValue }) => {
     try {
       dispatch(setCategoriesSuccess(undefined))
-      useSelector(getCategories)
+      dispatch(setCategories())
     } catch (err) {
       dispatch(setHttpStatus({ actionType: 'resetCategories', status: 'error' }))
 
