@@ -1,21 +1,18 @@
-import memoryCache, { CacheClass } from 'memory-cache'
-
 import { StatsMovement } from 'interfaces/NotionModels'
 import { User } from 'interfaces/User'
 import log from 'lib/log'
 import api from 'lib/notion-client'
 import withSession from 'lib/session'
-
-const memCache: CacheClass<string, StatsMovement[]> = memoryCache
+import { memoryCache } from 'lib/utils'
 
 const getOrSetData = async (startDate: string, endDate: string, refresh = false) => {
   const cacheKey = `statsItems-${startDate}-${endDate}`
   const timeInMinutes = 120
 
-  let cachedData = memCache.get(cacheKey)
+  let cachedData = memoryCache.get<StatsMovement[]>(cacheKey)
   if (!cachedData || refresh) {
     cachedData = await api.getStatsItems(startDate, endDate)
-    memCache.put(cacheKey, cachedData, timeInMinutes * 60 * 1000)
+    memoryCache.set(cacheKey, cachedData, timeInMinutes * 60)
   } else {
     log('INFO', 'cached data found', 'api.statsItems.getOrSetData')
   }

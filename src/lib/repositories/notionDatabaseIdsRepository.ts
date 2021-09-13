@@ -1,16 +1,14 @@
-import memoryCache, { CacheClass } from 'memory-cache'
-
 import { NotionDatabaseIds } from 'lib/interfaces/notionDatabaseIds'
 import { initApi } from 'lib/notion-client'
+import { memoryCache } from 'lib/utils'
 
-const memCache: CacheClass<string, NotionDatabaseIds> = memoryCache
 const notionDatabaseIds = async (refresh = false) => {
   const cacheKey = 'notionDatabaseIds'
 
-  let cachedData = memCache.get(cacheKey)
+  let cachedData = memoryCache.get<NotionDatabaseIds>(cacheKey)
   if (!cachedData || refresh) {
     cachedData = await initApi().getDatabaseIds()
-    memCache.put(cacheKey, cachedData)
+    memoryCache.set(cacheKey, cachedData)
   }
   return cachedData
 }

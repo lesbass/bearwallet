@@ -1,4 +1,4 @@
-import memoryCache from 'memory-cache'
+import NodeCache from 'node-cache'
 import React from 'react'
 
 import { Icon } from 'interfaces/NotionModels'
@@ -45,6 +45,12 @@ export function renderValore(val: number, hideValues: boolean) {
   )
 }
 
-export function resetCache() {
-  memoryCache.clear()
+function getCache() {
+  return new NodeCache()
 }
+
+export function resetCache() {
+  memoryCache.flushAll()
+}
+
+export const memoryCache = getCache()

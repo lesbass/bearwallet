@@ -4,20 +4,17 @@ import { setHttpStatus } from 'store/http-status/http-status.store'
 
 import { setCategoriesSuccess } from './category.store'
 
-export const setCategories = createAsyncThunk(
-  'category/setCategories',
-  async (_, { dispatch, rejectWithValue }) => {
-    try {
-      const categories = await api.getCategories(false)
+export const setCategories = createAsyncThunk('category/setCategories', async (_, { dispatch, rejectWithValue }) => {
+  try {
+    const categories = await api.getCategories(false)
 
-      dispatch(setCategoriesSuccess(categories))
-    } catch (err) {
-      dispatch(setHttpStatus({ actionType: 'setCategories', status: 'error' }))
+    dispatch(setCategoriesSuccess(categories))
+  } catch (err) {
+    dispatch(setHttpStatus({ actionType: 'setCategories', status: 'error' }))
 
-      return rejectWithValue('get Categories fails!')
-    }
-  },
-)
+    return rejectWithValue('get Categories fails!')
+  }
+})
 
 export const resetCategories = createAsyncThunk(
   'category/resetCategories',
@@ -30,5 +27,5 @@ export const resetCategories = createAsyncThunk(
 
       return rejectWithValue('resetCategories fails!')
     }
-  },
+  }
 )
