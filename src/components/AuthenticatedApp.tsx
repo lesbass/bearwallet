@@ -7,7 +7,7 @@ import { setProjects } from 'store/project/project.actions'
 
 import Copyright from './Copyright'
 import QuickAddCard from './quickAdd/QuickAddCard'
-import RecentItemsCard from './RecentItemsCard'
+import RecentItemsCard from './RecentItems/RecentItemsCard'
 import StatsCard from './stats/StatsCard'
 import UtilsCard from './utils/UtilsCard'
 

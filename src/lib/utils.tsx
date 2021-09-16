@@ -1,3 +1,4 @@
+import moment from 'moment'
 import NodeCache from 'node-cache'
 import React from 'react'
 
@@ -56,3 +57,7 @@ export function resetCache() {
 export const memoryCache = getCache()
 
 export const globalCacheTimeInMinutes = 0.1
+
+export const isFuture = (data: string) => moment(new Date(data)).isAfter(moment(), 'day')
+export const isToday = (data: string) => moment(new Date(data)).isSame(moment(), 'day')
+export const isYesterday = (data: string) => moment(new Date(data)).add(1, 'day').isSame(moment(), 'day')
