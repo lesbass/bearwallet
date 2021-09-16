@@ -54,3 +54,5 @@ export function resetCache() {
 }
 
 export const memoryCache = getCache()
+
+export const globalCacheTimeInMinutes = 0.1

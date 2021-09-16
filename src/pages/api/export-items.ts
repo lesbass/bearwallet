@@ -3,16 +3,15 @@ import { User } from 'interfaces/User'
 import log from 'lib/log'
 import api from 'lib/notion-client'
 import withSession from 'lib/session'
-import { memoryCache } from 'lib/utils'
+import { globalCacheTimeInMinutes, memoryCache } from 'lib/utils'
 
 const getOrSetData = async (startDate: string, endDate: string, refresh = false) => {
   const cacheKey = `exportItems-${startDate}-${endDate}`
-  const timeInMinutes = 120
 
   let cachedData = memoryCache.get<ExportMovement[]>(cacheKey)
   if (!cachedData || refresh) {
     cachedData = await api.exportItems(startDate, endDate)
-    memoryCache.set(cacheKey, cachedData, timeInMinutes * 60)
+    memoryCache.set(cacheKey, cachedData, globalCacheTimeInMinutes * 60)
   } else {
     log('INFO', 'cached data found', 'api.exportItems.getOrSetData')
   }

@@ -3,16 +3,15 @@ import { User } from 'interfaces/User'
 import log from 'lib/log'
 import api from 'lib/notion-client'
 import withSession from 'lib/session'
-import { memoryCache } from 'lib/utils'
+import { globalCacheTimeInMinutes, memoryCache } from 'lib/utils'
 
 const getOrSetData = async (category: string | null, page: number, refresh = false) => {
   const cacheKey = 'getLatestItems-' + category + '-' + page
-  const timeInMinutes = 120
 
   let cachedData = memoryCache.get<Movement[]>(cacheKey)
   if (!cachedData || refresh) {
     cachedData = await api.getLatestItems(category, page, refresh)
-    memoryCache.set(cacheKey, cachedData, timeInMinutes * 60)
+    memoryCache.set(cacheKey, cachedData, globalCacheTimeInMinutes * 60)
   } else {
     log('INFO', 'cached data found -> ' + cacheKey, 'api.getLatestItems.getOrSetData')
   }

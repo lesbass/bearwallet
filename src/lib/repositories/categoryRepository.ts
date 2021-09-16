@@ -1,7 +1,7 @@
 import { Category } from 'interfaces/NotionModels'
 import log from 'lib/log'
 import api from 'lib/notion-client'
-import { memoryCache } from 'lib/utils'
+import { globalCacheTimeInMinutes, memoryCache } from 'lib/utils'
 
 interface CategoryRepository {
   getCategories: (refresh: boolean) => Promise<Category[]>
@@ -10,12 +10,11 @@ interface CategoryRepository {
 const initRepository = (): CategoryRepository => ({
   async getCategories(refresh = false) {
     const cacheKey = 'categoryRepository.getCategories'
-    const timeInMinutes = 120
 
     let cachedData = memoryCache.get<Category[]>(cacheKey)
     if (!cachedData || refresh) {
       cachedData = await api.getCategories(false)
-      memoryCache.set(cacheKey, cachedData, timeInMinutes * 60)
+      memoryCache.set(cacheKey, cachedData, globalCacheTimeInMinutes * 60)
     } else {
       log('INFO', 'cached data found', 'categoryRepository.getCategories')
     }
