@@ -8,12 +8,12 @@ import useAuthentication from 'hooks/useAuthentication'
 
 const Copyright: React.VFC = () => {
   const { logOut } = useAuthentication()
-
   const { t } = useTranslation('common')
+
   return (
     <Box sx={{ marginBottom: '20px' }} textAlign={'center'}>
-      <Button size="small" variant={'outlined'} onClick={logOut}>
-        <LockIcon /> {t('logout')}
+      <Button size='small' startIcon={<LockIcon />} variant={'outlined'} onClick={logOut}>
+        {t('logout')}
       </Button>
     </Box>
   )

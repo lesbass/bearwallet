@@ -6,10 +6,10 @@ import { setLastItems } from 'store/lastItems/lastItems.actions'
 import { setProjects } from 'store/project/project.actions'
 
 import Copyright from './Copyright'
-import QuickAddCard from './quickAdd/QuickAddCard'
-import RecentItemsCard from './RecentItems/RecentItemsCard'
-import StatsCard from './stats/StatsCard'
-import UtilsCard from './utils/UtilsCard'
+import QuickAddCard from './quickAdd'
+import RecentItemsCard from './recentItems'
+import StatsCard from './stats'
+import UtilsCard from './utils'
 
 const AuthenticatedApp: React.VFC = () => {
   const dispatch = useAppDispatch()

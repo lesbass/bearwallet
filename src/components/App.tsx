@@ -3,8 +3,8 @@ import React from 'react'
 import useAuthentication from 'hooks/useAuthentication'
 
 import AuthenticatedApp from './AuthenticatedApp'
-import AppLoader from './loader/AppLoader'
-import LoginForm from './login/LoginForm'
+import AppLoader from './loader'
+import LoginForm from './login'
 
 const App: React.VFC = () => {
   const { user } = useAuthentication()
