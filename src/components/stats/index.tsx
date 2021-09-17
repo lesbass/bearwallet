@@ -1,7 +1,7 @@
-import { Card, CardHeader, Collapse, IconButton, IconButtonProps } from '@material-ui/core'
-import { styled } from '@material-ui/core/styles'
-import EqualizerIcon from '@material-ui/icons/Equalizer'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import EqualizerIcon from '@mui/icons-material/Equalizer'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { Card, CardHeader, Collapse, IconButton, IconButtonProps } from '@mui/material'
+import { styled } from '@mui/material/styles'
 import useTranslation from 'next-translate/useTranslation'
 import React, { useState } from 'react'
 

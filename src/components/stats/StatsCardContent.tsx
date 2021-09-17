@@ -1,4 +1,4 @@
-import { CardContent, Grid } from '@material-ui/core'
+import { CardContent, Grid } from '@mui/material'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 

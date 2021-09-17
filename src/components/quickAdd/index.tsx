@@ -1,5 +1,5 @@
-import { CardActions } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
+import { Alert } from '@mui/lab'
+import { CardActions } from '@mui/material'
 import useTranslation from 'next-translate/useTranslation'
 import React from 'react'
 import { useSelector } from 'react-redux'

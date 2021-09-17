@@ -1,11 +1,11 @@
-import { Avatar, Box } from '@material-ui/core'
+import { Avatar, Box } from '@mui/material'
 import moment from 'moment'
 import useTranslation from 'next-translate/useTranslation'
 import React from 'react'
 
 import { isToday, isYesterday } from 'lib/utils'
 
-const DateRenderer: React.VFC<{ data: string, dateColor: string }> = ({ data,dateColor }) => {
+const DateRenderer: React.VFC<{ data: string; dateColor: string }> = ({ data, dateColor }) => {
   const dateParsed = moment(new Date(data))
   const { t } = useTranslation('recentItems')
 
@@ -43,7 +43,7 @@ const DateRenderer: React.VFC<{ data: string, dateColor: string }> = ({ data,dat
         textAlign: 'center',
         width: 32,
       }}
-      variant='rounded'
+      variant="rounded"
     >
       <Box display={'block'}>{printDate()}</Box>
     </Avatar>

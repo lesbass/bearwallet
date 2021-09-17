@@ -1,3 +1,5 @@
+import AddIcon from '@mui/icons-material/Add'
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import {
   Button,
   ButtonGroup,
@@ -11,9 +13,7 @@ import {
   Paper,
   Popper,
   Typography,
-} from '@material-ui/core'
-import AddIcon from '@material-ui/icons/Add'
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
+} from '@mui/material'
 import useTranslation from 'next-translate/useTranslation'
 import React, { useRef, useState } from 'react'
 import { useSelector } from 'react-redux'

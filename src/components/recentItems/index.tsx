@@ -1,5 +1,5 @@
-import { Card, CardHeader } from '@material-ui/core'
-import ListIcon from '@material-ui/icons/List'
+import AccessAlarmIcon from '@mui/icons-material/AccessAlarm'
+import { Card, CardHeader } from '@mui/material'
 import { partition } from 'lodash'
 import useTranslation from 'next-translate/useTranslation'
 import React, { useEffect, useState } from 'react'
@@ -60,7 +60,7 @@ const RecentItemsCard: React.VFC = () => {
       {!!futureData.length && (
         <Card style={{ backgroundColor: '#252c2f', marginBottom: '20px' }}>
           <CardHeader
-            avatar={<ListIcon />}
+            avatar={<AccessAlarmIcon />}
             sx={{ paddingBottom: 0 }}
             title={t('future_items')}
             titleTypographyProps={{ variant: 'h6' }}

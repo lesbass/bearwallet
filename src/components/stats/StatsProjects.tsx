@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Grid, Table, TableBody, TableContainer, TableHead, TableRow } from '@material-ui/core'
+import { Box, CircularProgress, Grid, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material'
 import moment from 'moment'
 import useTranslation from 'next-translate/useTranslation'
 import React from 'react'

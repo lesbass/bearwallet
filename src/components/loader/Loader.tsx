@@ -1,4 +1,4 @@
-import { Box, Grid, LinearProgress } from '@material-ui/core'
+import { Box, Grid, LinearProgress } from '@mui/material'
 import useTranslation from 'next-translate/useTranslation'
 import React from 'react'
 

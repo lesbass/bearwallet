@@ -1,6 +1,6 @@
-import { Box } from '@material-ui/core'
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
-import { LoadingButton } from '@material-ui/lab'
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
+import { LoadingButton } from '@mui/lab'
+import { Box } from '@mui/material'
 import useTranslation from 'next-translate/useTranslation'
 import React from 'react'
 import { useSelector } from 'react-redux'
@@ -8,8 +8,6 @@ import { useSelector } from 'react-redux'
 import { useAppThunkDispatch } from 'lib/useAppDispatch'
 import { getCurrentCategory } from 'store/category/category.selectors'
 import { setLastItems } from 'store/lastItems/lastItems.actions'
-
-
 
 interface Props {
   currentPage: number

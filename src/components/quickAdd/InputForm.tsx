@@ -1,3 +1,7 @@
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import ClearIcon from '@mui/icons-material/Clear'
+import SaveIcon from '@mui/icons-material/Save'
+import LoadingButton from '@mui/lab/LoadingButton'
 import {
   Autocomplete,
   Avatar,
@@ -13,11 +17,7 @@ import {
   InputLabel,
   Stack,
   TextField,
-} from '@material-ui/core'
-import ArrowBackIcon from '@material-ui/icons/ArrowBack'
-import ClearIcon from '@material-ui/icons/Clear'
-import SaveIcon from '@material-ui/icons/Save'
-import LoadingButton from '@material-ui/lab/LoadingButton'
+} from '@mui/material'
 import moment from 'moment'
 import useTranslation from 'next-translate/useTranslation'
 import React, { useEffect, useState } from 'react'

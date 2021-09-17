@@ -1,6 +1,5 @@
-import { Button } from '@material-ui/core'
-import Box from '@material-ui/core/Box'
-import LockIcon from '@material-ui/icons/Lock'
+import LockIcon from '@mui/icons-material/Lock'
+import { Box, Button } from '@mui/material'
 import useTranslation from 'next-translate/useTranslation'
 import React from 'react'
 
@@ -12,7 +11,7 @@ const Copyright: React.VFC = () => {
 
   return (
     <Box sx={{ marginBottom: '20px' }} textAlign={'center'}>
-      <Button size='small' startIcon={<LockIcon />} variant={'outlined'} onClick={logOut}>
+      <Button size="small" startIcon={<LockIcon />} variant={'outlined'} onClick={logOut}>
         {t('logout')}
       </Button>
     </Box>

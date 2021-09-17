@@ -1,7 +1,7 @@
-import { CardHeader, IconButton } from '@material-ui/core'
-import { Visibility, VisibilityOff } from '@material-ui/icons'
-import ListIcon from '@material-ui/icons/List'
-import ReplayIcon from '@material-ui/icons/Replay'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
+import ListIcon from '@mui/icons-material/List'
+import ReplayIcon from '@mui/icons-material/Replay'
+import { CardHeader, IconButton } from '@mui/material'
 import React from 'react'
 import { useSelector } from 'react-redux'
 
@@ -13,9 +13,7 @@ import { setNotes } from 'store/note/note.actions'
 import { getHideValues } from 'store/settings/settings.selectors'
 import { setHideValuesSuccess } from 'store/settings/settings.store'
 
-
 import TitleRenderer from './TitleRenderer'
-
 
 interface Props {
   backToFirstPage: () => void

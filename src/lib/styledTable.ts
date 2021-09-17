@@ -1,5 +1,5 @@
-import { TableCell, tableCellClasses, TableRow } from '@material-ui/core'
-import { styled } from '@material-ui/core/styles'
+import { TableCell, tableCellClasses, TableRow } from '@mui/material'
+import { styled } from '@mui/material/styles'
 
 export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   // hide last border

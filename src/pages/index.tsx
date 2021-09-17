@@ -1,7 +1,7 @@
-import { CssBaseline, ThemeProvider } from '@material-ui/core'
-import Container from '@material-ui/core/Container'
-import { StyledEngineProvider } from '@material-ui/core/styles'
-import { Action, combineReducers, configureStore, ThunkAction } from '@reduxjs/toolkit'
+import { CssBaseline, ThemeProvider } from '@mui/material'
+import Container from '@mui/material/Container'
+import { StyledEngineProvider } from '@mui/material/styles'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import moment from 'moment'
 import Head from 'next/head'
 import * as React from 'react'
@@ -28,8 +28,6 @@ const rootReducer = combineReducers({
 
 export type RootState = ReturnType<typeof rootReducer>
 
-export type AppThunk = ThunkAction<void, RootState, null, Action<string>>
-
 export const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
   reducer: rootReducer, // se è in produzione non include i devtools
@@ -47,7 +45,7 @@ const Index: React.VFC = () => {
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
 
-          <Container component="main" maxWidth="sm">
+          <Container component='main' maxWidth='sm'>
             <App />
           </Container>
         </StyledEngineProvider>

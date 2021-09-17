@@ -1,5 +1,5 @@
-import { Box, CircularProgress, Grid } from '@material-ui/core'
-import TrendingUpIcon from '@material-ui/icons/TrendingUp'
+import TrendingUpIcon from '@mui/icons-material/TrendingUp'
+import { Box, CircularProgress, Grid } from '@mui/material'
 import moment from 'moment'
 import useTranslation from 'next-translate/useTranslation'
 import React, { useEffect, useState } from 'react'

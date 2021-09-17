@@ -1,5 +1,5 @@
-import { CardContent, Table, TableBody, TableContainer, TableHead, TableRow } from '@material-ui/core'
-import { blueGrey, grey } from '@material-ui/core/colors'
+import { CardContent, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material'
+import { blueGrey, grey } from '@mui/material/colors'
 import { groupBy } from 'lodash'
 import useTranslation from 'next-translate/useTranslation'
 import React from 'react'
@@ -27,7 +27,7 @@ const TableData: React.VFC<{ data: Movement[] | undefined }> = ({ data }) => {
 
   return (
     <TableContainer component={CardContent}>
-      <Table size='small'>
+      <Table size="small">
         <TableHead>
           <TableRow>
             <StyledTableCell>{t('table_date')}</StyledTableCell>
@@ -40,9 +40,7 @@ const TableData: React.VFC<{ data: Movement[] | undefined }> = ({ data }) => {
           {!!data ? (
             Object.values(groupBy(data, 'date'))
               .flatMap((value: Movement[], index: number) => value.map((item) => enrichItem(item, index)))
-              .map((item, index) => (
-                <TableDataRow key={index} item={item} />
-              ))
+              .map((item, index) => <TableDataRow key={index} item={item} />)
           ) : (
             <TableDataLoader />
           )}

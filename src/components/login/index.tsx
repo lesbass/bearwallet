@@ -1,5 +1,8 @@
 import styled from '@emotion/styled'
+import LockOpenIcon from '@mui/icons-material/LockOpen'
+import { LoadingButton } from '@mui/lab'
 import {
+  Box,
   FormControl,
   FormControlLabel,
   Grid,
@@ -9,10 +12,7 @@ import {
   Stack,
   Switch,
   Typography,
-} from '@material-ui/core'
-import Box from '@material-ui/core/Box'
-import LockOpenIcon from '@material-ui/icons/LockOpen'
-import LoadingButton from '@material-ui/lab/LoadingButton'
+} from '@mui/material'
 import useTranslation from 'next-translate/useTranslation'
 import React, { useCallback, useState } from 'react'
 import { useSelector } from 'react-redux'

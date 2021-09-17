@@ -1,4 +1,4 @@
-import { Link } from '@material-ui/core'
+import { Link } from '@mui/material'
 import React from 'react'
 import { useSelector } from 'react-redux'
 
@@ -20,7 +20,9 @@ const TableDataRow: React.VFC<{ item: Movement & { dateColor: string } }> = ({ i
 
   return (
     <StyledTableRow>
-      <StyledTableCell><DateRenderer data={item.date} dateColor={item.dateColor} /></StyledTableCell>
+      <StyledTableCell>
+        <DateRenderer data={item.date} dateColor={item.dateColor} />
+      </StyledTableCell>
       <StyledTableCell sx={{ whiteSpace: 'nowrap' }}>{renderValore(item.value)}</StyledTableCell>
       {!currentCategory && (
         <StyledTableCell>
@@ -30,7 +32,7 @@ const TableDataRow: React.VFC<{ item: Movement & { dateColor: string } }> = ({ i
       <StyledTableCell>
         <ProjectRenderer projectIds={item.projectIds} />
         <Link
-          color='inherit'
+          color="inherit"
           href={item.url}
           rel={'noreferrer'}
           sx={{

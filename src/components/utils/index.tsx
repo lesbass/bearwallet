@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader } from '@material-ui/core'
-import BuildIcon from '@material-ui/icons/Build'
+import BuildIcon from '@mui/icons-material/Build'
+import { Card, CardContent, CardHeader } from '@mui/material'
 import useTranslation from 'next-translate/useTranslation'
 import React from 'react'
 

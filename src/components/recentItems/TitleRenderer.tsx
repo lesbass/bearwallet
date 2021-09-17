@@ -1,4 +1,4 @@
-import { Avatar, Chip } from '@material-ui/core'
+import { Avatar, Chip } from '@mui/material'
 import useTranslation from 'next-translate/useTranslation'
 import React from 'react'
 import { useSelector } from 'react-redux'

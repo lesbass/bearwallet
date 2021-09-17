@@ -1,4 +1,4 @@
-import { Chip, CircularProgress } from '@material-ui/core'
+import { Chip, CircularProgress } from '@mui/material'
 import React from 'react'
 import { useSelector } from 'react-redux'
 

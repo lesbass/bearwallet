@@ -5,9 +5,9 @@
   "dependencies": {
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
-    "@material-ui/core": "next",
-    "@material-ui/icons": "next",
-    "@material-ui/lab": "next",
+    "@mui/icons-material": "^5.0.0",
+    "@mui/lab": "^5.0.0-alpha.47",
+    "@mui/material": "^5.0.0",
     "@notionhq/client": "^0.2.3",
     "@reduxjs/toolkit": "^1.6.1",
     "@types/node": "^16.4.10",

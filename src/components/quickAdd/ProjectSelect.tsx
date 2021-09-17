@@ -1,4 +1,4 @@
-import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select } from '@material-ui/core'
+import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select } from '@mui/material'
 import useTranslation from 'next-translate/useTranslation'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
