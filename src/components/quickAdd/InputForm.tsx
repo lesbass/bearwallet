@@ -55,6 +55,10 @@ const InputForm: React.VFC = () => {
   const [note, setNote] = useState('')
   const selectedProject = useSelector(getCurrentProject)
 
+  const setNoteUpperCaseFirstLetter = (value: string) => {
+    setNote(!note.length ? value.toUpperCase() : value)
+  }
+
   const onKeyDown = (event: React.KeyboardEvent<HTMLFormElement>): void => {
     if (event.key === 'Enter') {
       event.preventDefault()
@@ -189,12 +193,12 @@ const InputForm: React.VFC = () => {
                     }}
                     label={t('notes')}
                     variant="standard"
-                    onChange={(e) => setNote(e.target.value)}
+                    onChange={(e) => setNoteUpperCaseFirstLetter(e.target.value)}
                   />
                 )}
                 value={note}
                 onChange={(event, newValue) => {
-                  setNote(newValue ?? '')
+                  setNoteUpperCaseFirstLetter(newValue ?? '')
                 }}
                 onClose={() => {
                   setOpen(false)
