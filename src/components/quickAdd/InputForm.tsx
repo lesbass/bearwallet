@@ -50,13 +50,14 @@ const InputForm: React.VFC = () => {
 
   const [date, setDate] = useState(moment().format('yyyy-MM-DD'))
   const [dateError, setDateError] = useState(false)
-  const [importo, setImporto] = useState<number | null>(null)
-  const [importoError, setImportoError] = useState(false)
+  const [amount, setAmount] = useState<number | null>(null)
+  const [amountError, setAmountError] = useState(false)
   const [note, setNote] = useState('')
   const selectedProject = useSelector(getCurrentProject)
 
   const setNoteUpperCaseFirstLetter = (value: string) => {
-    setNote(!note.length ? value.toUpperCase() : value)
+    const isFirstTypedChar = !note.length && value.length === 1
+    setNote(isFirstTypedChar ? value.toUpperCase() : value)
   }
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLFormElement>): void => {
@@ -67,22 +68,23 @@ const InputForm: React.VFC = () => {
     }
   }
 
-  const submitForm = () => {
-    let isValid = true
-    if (importo === null || importo <= 0) {
-      setImportoError(true)
-      isValid = false
-    }
+  const validateAmount = () => {
+    const isAmountValid = (amount ?? 0) > 0
+    setAmountError(!isAmountValid)
 
-    if (isValid) {
+    return isAmountValid
+  }
+
+  const submitForm = () => {
+    validateAmount() && (() => {
       dispatch(setProcessingSuccess(true))
       api
         .createItem({
           categoryId: category.id,
           date: date,
-          description: note,
+          description: (note ?? '').trim(),
           projectId: selectedProject,
-          value: importo ?? 0,
+          value: amount ?? 0,
         })
         .then(() => {
           dispatch(setProcessingSuccess(false))
@@ -96,7 +98,7 @@ const InputForm: React.VFC = () => {
       setTimeout(() => {
         dismissForm()
       }, 500)
-    }
+    })()
   }
 
   const [open, setOpen] = useState(false)
@@ -137,22 +139,22 @@ const InputForm: React.VFC = () => {
         title={
           <>
             {t('title') + ': '}
-            <Chip avatar={<Avatar>{renderIcon(category.icon)}</Avatar>} color="primary" label={category.label} />
+            <Chip avatar={<Avatar>{renderIcon(category.icon)}</Avatar>} color='primary' label={category.label} />
           </>
         }
         titleTypographyProps={{ variant: 'h6' }}
       />
       <CardContent>
-        <Box noValidate autoComplete="off" component="form" onKeyDown={onKeyDown}>
+        <Box noValidate autoComplete='off' component='form' onKeyDown={onKeyDown}>
           <Grid container spacing={2} sx={{ marginTop: '10px' }}>
             <Grid item xs={6}>
               <FormControl fullWidth>
-                <InputLabel htmlFor="data">{t('date')}</InputLabel>
+                <InputLabel htmlFor='data'>{t('date')}</InputLabel>
                 <Input
                   required
                   error={dateError}
-                  id="data"
-                  type="date"
+                  id='data'
+                  type='date'
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
                   onFocus={() => setDateError(false)}
@@ -161,24 +163,24 @@ const InputForm: React.VFC = () => {
             </Grid>
             <Grid item xs={6}>
               <FormControl fullWidth>
-                <InputLabel htmlFor="importo">{t('value')}</InputLabel>
+                <InputLabel htmlFor='amount'>{t('value')}</InputLabel>
                 <Input
                   autoFocus
                   required
-                  error={importoError}
-                  id="importo"
-                  startAdornment={<InputAdornment position="start">&euro;</InputAdornment>}
-                  type="number"
-                  value={importo ?? ''}
-                  onChange={(e) => setImporto(+e.target.value)}
-                  onFocus={() => setImportoError(false)}
+                  error={amountError}
+                  id='amount'
+                  startAdornment={<InputAdornment position='start'>&euro;</InputAdornment>}
+                  type='number'
+                  value={amount ?? ''}
+                  onChange={(e) => setAmount(+e.target.value)}
+                  onFocus={() => setAmountError(false)}
                 />
               </FormControl>
             </Grid>
             <Grid item xs={12}>
               <Autocomplete
                 freeSolo
-                id="descrizione"
+                id='notes'
                 loading={loading}
                 loadingText={t('loading')}
                 open={open}
@@ -192,7 +194,7 @@ const InputForm: React.VFC = () => {
                       endAdornment: <>{params.InputProps.endAdornment}</>,
                     }}
                     label={t('notes')}
-                    variant="standard"
+                    variant='standard'
                     onChange={(e) => setNoteUpperCaseFirstLetter(e.target.value)}
                   />
                 )}
@@ -213,17 +215,17 @@ const InputForm: React.VFC = () => {
             </Grid>
           </Grid>
 
-          <Stack direction="row" spacing={2} sx={{ marginTop: '20px' }}>
+          <Stack direction='row' spacing={2} sx={{ marginTop: '20px' }}>
             <LoadingButton
-              color="primary"
-              loadingPosition="start"
+              color='primary'
+              loadingPosition='start'
               startIcon={<SaveIcon />}
-              variant="contained"
+              variant='contained'
               onClick={submitForm}
             >
               {t('save')}
             </LoadingButton>
-            <Button color="secondary" startIcon={<ClearIcon />} variant="contained" onClick={dismissForm}>
+            <Button color='secondary' startIcon={<ClearIcon />} variant='contained' onClick={dismissForm}>
               {t('cancel')}
             </Button>
           </Stack>
