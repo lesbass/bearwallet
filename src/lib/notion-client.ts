@@ -28,7 +28,7 @@ type NotionClient = Gateway & {
 export const initApi = (): NotionClient => ({
   async authenticateUser(userName: string, password: string) {
     const { users_database_id } = await notionDatabaseIds()
-    log('INFO', `Trying to authenticate user ${userName} against Notion API`, 'api')
+    log('INFO', `Trying to authenticate user ${userName} against Notion API`, 'api.authenticateUser')
 
     let request_payload: RequestParameters = {
       body: {
@@ -65,7 +65,7 @@ export const initApi = (): NotionClient => ({
   },
   async createItem(item: NewMovement) {
     const { movement_database_id } = await notionDatabaseIds()
-    log('INFO', 'Sending data to Notion API', 'api')
+    log('INFO', 'Sending data to Notion API', 'api.createItem')
 
     const progettoData = item.projectId
       ? {
@@ -118,7 +118,7 @@ export const initApi = (): NotionClient => ({
   async exportItems(startDate, endDate) {
     const items: ExportMovement[] = []
     const { movement_database_id } = await notionDatabaseIds()
-    log('INFO', `Reading movements on date range ${startDate} - ${endDate} from Notion API`, 'api')
+    log('INFO', `Reading movements on date range ${startDate} - ${endDate} from Notion API`, 'api.exportItems')
 
     const categories = await this.getCategories(false)
 
@@ -167,18 +167,22 @@ export const initApi = (): NotionClient => ({
       const current_pages = await notion.request<MovementResultList>(request_payload)
 
       for (const result of current_pages.results) {
-        const title = result.properties.Descrizione.title[0]
-        const descrizione = title === undefined ? '' : title.plain_text
-        const categoryElement = result.properties.Categoria.relation[0]
-        const category =
-          categoryElement === undefined ? '-' : categories.find((cat) => cat.id == categoryElement.id)?.label ?? '-'
+        try {
+          const title = result.properties.Descrizione.title[0]
+          const descrizione = title === undefined ? '' : title.plain_text
+          const categoryElement = result.properties.Categoria.relation[0]
+          const category =
+            categoryElement === undefined ? '-' : categories.find((cat) => cat.id == categoryElement.id)?.label ?? '-'
 
-        items.push(<ExportMovement>{
-          category,
-          date: result.properties.Data.date.start,
-          description: descrizione,
-          value: result.properties['Dare/Avere (€)'].formula.number,
-        })
+          items.push(<ExportMovement>{
+            category,
+            date: result.properties.Data.date.start,
+            description: descrizione,
+            value: result.properties['Dare/Avere (€)'].formula.number,
+          })
+        } catch (e) {
+          log('ERROR', `${e}: ${JSON.stringify(result)}`, 'api.exportItems')
+        }
       }
 
       if (current_pages.has_more) {
@@ -192,7 +196,7 @@ export const initApi = (): NotionClient => ({
   async getCategories() {
     const categories: Category[] = []
     const { category_database_id } = await notionDatabaseIds()
-    log('INFO', 'Reading categories from Notion API', 'api')
+    log('INFO', 'Reading categories from Notion API', 'api.getCategories')
 
     async function getPageOfCategories(cursor: string | undefined = undefined) {
       let request_payload: RequestParameters
@@ -246,7 +250,7 @@ export const initApi = (): NotionClient => ({
       project_database_id: '',
       users_database_id: '',
     }
-    log('INFO', 'Reading database ids from Notion API', 'api')
+    log('INFO', 'Reading database ids from Notion API', 'api.getDatabaseIds')
 
     async function getPageOfItems(cursor: string | undefined = undefined) {
       let request_payload: RequestParameters
@@ -299,7 +303,7 @@ export const initApi = (): NotionClient => ({
   async getLatestItems(category: string | null, page: number) {
     const items: Movement[] = []
     const { movement_database_id } = await notionDatabaseIds()
-    log('INFO', `Reading latest items from Notion API for category ${category}, page ${page}`, 'api')
+    log('INFO', `Reading latest items from Notion API for category ${category}, page ${page}`, 'api.getLatestItems')
     let pageNumber = page
 
     async function getPageOfItems(cursor: string | undefined = undefined) {
@@ -339,6 +343,7 @@ export const initApi = (): NotionClient => ({
       const current_pages = await notion.request<MovementResultList>(request_payload)
 
       for (const result of current_pages.results) {
+        try{
         const title = result.properties.Descrizione.title[0]
         const descrizione = title === undefined ? '' : title.plain_text
         const categoryId = result.properties.Categoria.relation[0]?.id ?? '-'
@@ -353,6 +358,9 @@ export const initApi = (): NotionClient => ({
           url: result.url,
           value: result.properties['Dare/Avere (€)'].formula.number,
         })
+        }catch(e){
+          log('ERROR', `${e}: ${JSON.stringify(result)}`, 'api.getLatestItems')
+        }
       }
 
       if (--pageNumber > 0 && current_pages.has_more) {
@@ -366,7 +374,7 @@ export const initApi = (): NotionClient => ({
   async getLatestNotesForCategory(category: string) {
     const items: string[] = []
     const { movement_database_id } = await notionDatabaseIds()
-    log('INFO', `Reading latest notes for category ${category} from Notion API`, 'api')
+    log('INFO', `Reading latest notes for category ${category} from Notion API`, 'api.getLatestNotesForCategory')
 
     async function getPageOfItems() {
       let request_payload: RequestParameters = {
@@ -412,7 +420,7 @@ export const initApi = (): NotionClient => ({
   async getProjects() {
     const projects: Project[] = []
     const { project_database_id } = await notionDatabaseIds()
-    log('INFO', 'Reading projects from Notion API', 'api')
+    log('INFO', 'Reading projects from Notion API', 'api.getProjects')
 
     async function getPageOfProjects(cursor: string | undefined = undefined) {
       let request_payload: RequestParameters
@@ -461,7 +469,7 @@ export const initApi = (): NotionClient => ({
   async getStatsItems(startDate, endDate) {
     const items: StatsMovement[] = []
     const { movement_database_id } = await notionDatabaseIds()
-    log('INFO', `Reading movements on date range ${startDate} - ${endDate} from Notion API`, 'api')
+    log('INFO', `Reading movements on date range ${startDate} - ${endDate} from Notion API`, 'api.getStatsItems')
 
     async function getPageOfItems(cursor: string | undefined = undefined) {
       let request_payload: RequestParameters
@@ -506,15 +514,18 @@ export const initApi = (): NotionClient => ({
       }
       // While there are more pages left in the query, get pages from the database.
       const current_pages = await notion.request<MovementResultList>(request_payload)
-
       for (const result of current_pages.results) {
-        const projectIds = result.properties.Progetto.relation.map((project) => project.id)
+        try {
+          const projectIds = result.properties.Progetto.relation.map((project) => project.id)
 
-        items.push(<StatsMovement>{
-          date: result.properties.Data.date.start,
-          projectIds: projectIds,
-          value: result.properties['Dare/Avere (€)'].formula.number,
-        })
+          items.push(<StatsMovement>{
+            date: result.properties.Data.date.start,
+            projectIds: projectIds,
+            value: result.properties['Dare/Avere (€)'].formula.number,
+          })
+        } catch (e) {
+          log('ERROR', `${e}: ${JSON.stringify(result)}`, 'api.getStatsItems')
+        }
       }
 
       if (current_pages.has_more) {
@@ -528,7 +539,7 @@ export const initApi = (): NotionClient => ({
   async getTelegramUsers() {
     const telegramUsers: string[] = []
     const { users_database_id } = await notionDatabaseIds()
-    log('INFO', 'Reading telegram users from Notion API', 'api')
+    log('INFO', 'Reading telegram users from Notion API', 'api.getTelegramUsers')
 
     async function getPageOfTelegramUsers(cursor: string | undefined = undefined) {
       let request_payload: RequestParameters
