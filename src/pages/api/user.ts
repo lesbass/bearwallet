@@ -1,9 +1,8 @@
-import { User } from 'interfaces/User'
 import log from 'lib/log'
-import withSession from 'lib/session'
+import { withSessionRoute } from 'lib/session'
 
-export default withSession(async (req, res) => {
-  const user = req.session.get<User>('user')
+export default withSessionRoute((req, res) => {
+  const user = req.session.user
 
   try {
     if (user) {
@@ -19,7 +18,7 @@ export default withSession(async (req, res) => {
       })
     }
   } catch (error) {
-    log('ERROR', error.message, 'api.getCategories')
+    log('ERROR', error.message, 'api.user')
     res.status(500).send('Generic error: ' + error.message)
   }
 })

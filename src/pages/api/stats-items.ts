@@ -1,8 +1,7 @@
 import { StatsMovement } from 'interfaces/NotionModels'
-import { User } from 'interfaces/User'
 import log from 'lib/log'
 import api from 'lib/notion-client'
-import withSession from 'lib/session'
+import { withSessionRoute } from 'lib/session'
 import { globalCacheTimeInMinutes, memoryCache } from 'lib/utils'
 
 const getOrSetData = async (startDate: string, endDate: string, refresh = false) => {
@@ -19,8 +18,8 @@ const getOrSetData = async (startDate: string, endDate: string, refresh = false)
   return cachedData
 }
 
-export default withSession(async (request, response) => {
-  const user = request.session.get<User>('user')
+export default withSessionRoute(async (request, response) => {
+  const user = request.session.user
   if (user?.isLoggedIn !== true) {
     log('ERROR', 'Method not allowed', 'api.statsItems')
     response.status(405).send('')
@@ -34,11 +33,11 @@ export default withSession(async (request, response) => {
       const data = await getOrSetData(startDate, endDate, refresh)
       response.status(200).send(data)
     } else {
-      log('ERROR', 'Method not allowed', 'api.exportItems')
+      log('ERROR', 'Method not allowed', 'api.statsItems')
       response.status(405).send('')
     }
   } catch (error) {
-    log('ERROR', error.message, 'api.exportItems')
+    log('ERROR', error.message, 'api.statsItems')
     response.status(500).send('Generic error')
   }
 })

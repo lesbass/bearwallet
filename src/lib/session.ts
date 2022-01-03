@@ -1,22 +1,34 @@
-// this file is a wrapper with defaults to be used in both API routes and `getServerSideProps` functions
+import { IronSessionOptions} from 'iron-session'
+import { withIronSessionApiRoute, withIronSessionSsr } from 'iron-session/next'
 import moment from 'moment'
-import { NextApiRequest, NextApiResponse } from 'next'
-import { Session, withIronSession } from 'next-iron-session'
+import { GetServerSidePropsContext, GetServerSidePropsResult, NextApiHandler } from 'next'
 
-// optionally add stronger typing for next-specific implementation
-export type NextIronRequest = NextApiRequest & { session: Session }
-export type NextIronHandler = (req: NextIronRequest, res: NextApiResponse) => void | Promise<void>
+import { User } from '../interfaces/User'
 
-const withSession = (handler: NextIronHandler) =>
-  withIronSession(handler, {
-    cookieName: process.env.SECRET_COOKIE_NAME ?? '',
-    cookieOptions: {
-      expires: moment()
-        .add(+(process.env.SECRET_COOKIE_EXPIRES_DAYS ?? '30'), 'days')
-        .toDate(),
-      secure: process.env.NODE_ENV === 'production',
-    },
-    password: process.env.SECRET_COOKIE_PASSWORD ?? '',
-  })
+export const sessionOptions: IronSessionOptions = {
+  cookieName: process.env.SECRET_COOKIE_NAME ?? '',
+  cookieOptions: {
+    expires: moment()
+      .add(+(process.env.SECRET_COOKIE_EXPIRES_DAYS ?? '30'), 'days')
+      .toDate(),
+    secure: process.env.NODE_ENV === 'production',
+  },
+  password: process.env.SECRET_COOKIE_PASSWORD ?? '',
+}
 
-export default withSession
+export function withSessionRoute(handler: NextApiHandler) {
+  return withIronSessionApiRoute(handler, sessionOptions)
+}
+
+// Theses types are compatible with InferGetStaticPropsType https://nextjs.org/docs/basic-features/data-fetching#typescript-use-getstaticprops
+export function withSessionSsr<P extends { [key: string]: unknown } = { [key: string]: unknown }>(
+  handler: (context: GetServerSidePropsContext) => GetServerSidePropsResult<P> | Promise<GetServerSidePropsResult<P>>
+) {
+  return withIronSessionSsr(handler, sessionOptions)
+}
+
+declare module 'iron-session' {
+  interface IronSessionData {
+    user?: User
+  }
+}

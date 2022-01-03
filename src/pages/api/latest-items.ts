@@ -1,8 +1,7 @@
 import { Movement } from 'interfaces/NotionModels'
-import { User } from 'interfaces/User'
 import log from 'lib/log'
 import api from 'lib/notion-client'
-import withSession from 'lib/session'
+import { withSessionRoute } from 'lib/session'
 import { globalCacheTimeInMinutes, memoryCache } from 'lib/utils'
 
 const getOrSetData = async (category: string | null, page: number, refresh = false) => {
@@ -19,8 +18,8 @@ const getOrSetData = async (category: string | null, page: number, refresh = fal
   return cachedData
 }
 
-export default withSession(async (request, response) => {
-  const user = request.session.get<User>('user')
+export default withSessionRoute(async (request, response) => {
+  const user = request.session.user
   if (user?.isLoggedIn !== true) {
     log('ERROR', 'Method not allowed', 'api.getLatestItems')
     response.status(405).send('')

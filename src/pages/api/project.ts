@@ -1,10 +1,9 @@
-import { User } from 'interfaces/User'
 import log from 'lib/log'
 import projectRepository from 'lib/repositories/projectRepository'
-import withSession from 'lib/session'
+import { withSessionRoute } from 'lib/session'
 
-export default withSession(async (request, response) => {
-  const user = request.session.get<User>('user')
+export default withSessionRoute(async (request, response) => {
+  const user = request.session.user
   if (user?.isLoggedIn !== true) {
     log('ERROR', 'Method not allowed', 'api.getProjects')
     response.status(405).send('')

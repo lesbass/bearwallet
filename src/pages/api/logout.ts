@@ -1,6 +1,6 @@
-import withSession from 'lib/session'
+import { withSessionRoute } from 'lib/session'
 
-export default withSession(async (req, res) => {
+export default withSessionRoute((req, res) => {
   req.session.destroy()
   res.json({ isLoggedIn: false })
 })

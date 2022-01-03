@@ -1,9 +1,8 @@
-import { User } from 'interfaces/User'
 import log from 'lib/log'
 import api from 'lib/notion-client'
-import withSession from 'lib/session'
+import { withSessionRoute } from 'lib/session'
 
-export default withSession(async (request, response) => {
+export default withSessionRoute(async (request, response) => {
   try {
     if (request.method?.toUpperCase() === 'POST') {
       response.setHeader('content-type', 'application/json')
@@ -12,8 +11,7 @@ export default withSession(async (request, response) => {
 
       log('INFO', 'isLoggedIn: ' + isLoggedIn, 'api.login')
       if (isLoggedIn) {
-        const user: User = { isLoggedIn, userName }
-        request.session.set('user', user)
+        request.session.user = { isLoggedIn, userName }
         await request.session.save()
       }
       log('INFO', 'isLoggedIn: ' + isLoggedIn, 'api.login')

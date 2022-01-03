@@ -45,7 +45,7 @@ const Index: React.VFC = () => {
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
 
-          <Container component='main' maxWidth='sm'>
+          <Container component="main" maxWidth="sm">
             <App />
           </Container>
         </StyledEngineProvider>
