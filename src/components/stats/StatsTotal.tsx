@@ -13,7 +13,7 @@ const StatsTotal: React.VFC<Props> = ({ items }) => {
   const { t } = useTranslation('stats')
   const value =
     items !== undefined
-      ? items.map((val) => val.value).reduce((accumulator, currentValue) => accumulator + currentValue)
+      ? items.map((val) => val.value).reduce((accumulator, currentValue) => accumulator + currentValue, 0)
       : undefined
 
   return (

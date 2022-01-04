@@ -55,7 +55,7 @@ const StatsProjects: React.VFC<Props> = ({ items }) => {
               ]
             : [...accumulator, buildFlatProject(currentItem.valore, currentItem.projectId, currentItem.data)]
         ).sort((a, b) => (a.data.getTime() > b.data.getTime() ? -1 : 1))
-      })
+      }, [])
   }
 
   const stats = items ? buildStats(items) : []

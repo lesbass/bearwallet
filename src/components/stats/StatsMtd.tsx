@@ -25,20 +25,20 @@ const StatsMtd: React.VFC<Props> = ({ items }) => {
       const endDatePrevMonth = moment().subtract(1, 'months').toDate()
 
       const totalCurrMonth = items
-        .filter((value) => {
-          const parsedDate = new Date(value.date)
+        .filter((movement) => {
+          const parsedDate = new Date(movement.date)
           return parsedDate >= startDate && parsedDate <= endDate
         })
-        .map((value) => value.value)
-        .reduce((accumulator, currentValue) => accumulator + currentValue)
+        .map((movement) => movement.value)
+        .reduce((accumulator, currentValue) => accumulator + currentValue, 0)
 
       const totalPrevMonth = items
-        .filter((value) => {
-          const parsedDate = new Date(value.date)
+        .filter((movement) => {
+          const parsedDate = new Date(movement.date)
           return parsedDate >= startDatePrevMonth && parsedDate <= endDatePrevMonth
         })
-        .map((value) => value.value)
-        .reduce((accumulator, currentValue) => accumulator + currentValue)
+        .map((movement) => movement.value)
+        .reduce((accumulator, currentValue) => accumulator + currentValue, 0)
 
       setValue(totalCurrMonth)
       setPerc(Math.round(((totalCurrMonth - totalPrevMonth) / totalPrevMonth) * 10000) / 100)

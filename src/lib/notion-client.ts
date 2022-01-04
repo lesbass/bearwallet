@@ -343,22 +343,22 @@ export const initApi = (): NotionClient => ({
       const current_pages = await notion.request<MovementResultList>(request_payload)
 
       for (const result of current_pages.results) {
-        try{
-        const title = result.properties.Descrizione.title[0]
-        const descrizione = title === undefined ? '' : title.plain_text
-        const categoryId = result.properties.Categoria.relation[0]?.id ?? '-'
-        const projectIds = result.properties.Progetto.relation.map((project) => project.id)
+        try {
+          const title = result.properties.Descrizione.title[0]
+          const descrizione = title === undefined ? '' : title.plain_text
+          const categoryId = result.properties.Categoria.relation[0]?.id ?? '-'
+          const projectIds = result.properties.Progetto.relation.map((project) => project.id)
 
-        items.push(<Movement>{
-          categoryId,
-          date: result.properties.Data.date.start,
-          description: descrizione,
-          id: result.id,
-          projectIds: projectIds,
-          url: result.url,
-          value: result.properties['Dare/Avere (€)'].formula.number,
-        })
-        }catch(e){
+          items.push(<Movement>{
+            categoryId,
+            date: result.properties.Data.date.start,
+            description: descrizione,
+            id: result.id,
+            projectIds: projectIds,
+            url: result.url,
+            value: result.properties['Dare/Avere (€)'].formula.number,
+          })
+        } catch (e) {
           log('ERROR', `${e}: ${JSON.stringify(result)}`, 'api.getLatestItems')
         }
       }
@@ -467,6 +467,7 @@ export const initApi = (): NotionClient => ({
     return projects
   },
   async getStatsItems(startDate, endDate) {
+    const pageSize = 100
     const items: StatsMovement[] = []
     const { movement_database_id } = await notionDatabaseIds()
     log('INFO', `Reading movements on date range ${startDate} - ${endDate} from Notion API`, 'api.getStatsItems')
@@ -493,6 +494,7 @@ export const initApi = (): NotionClient => ({
                 },
               ],
             },
+            page_size: pageSize,
             sorts: [
               {
                 direction: 'descending',
@@ -506,6 +508,7 @@ export const initApi = (): NotionClient => ({
       } else {
         request_payload = {
           body: {
+            page_size: pageSize,
             start_cursor: cursor,
           },
           method: 'post',
