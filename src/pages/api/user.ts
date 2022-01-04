@@ -1,7 +1,7 @@
 import log from 'lib/log'
 import { withSessionRoute } from 'lib/session'
 
-export default withSessionRoute((req, res) => {
+export default withSessionRoute(async (req, res) => {
   const user = req.session.user
 
   try {
