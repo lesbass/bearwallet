@@ -1,7 +1,5 @@
 # BearWallet App
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/2cfb6211-069b-4a38-b17c-231e44ef680c/deploy-status)](https://app.netlify.com/sites/friendly-darwin-ee4791/deploys)
-
 Personal finance app for managing small and big expenses.
 It is based on the Notion API, and mapping the following template:
 

@@ -34,7 +34,6 @@
     "xlsx": "^0.17.0"
   },
   "devDependencies": {
-    "@netlify/plugin-nextjs": "^4.1.1",
     "@types/file-saver": "^2.0.3",
     "@types/lodash": "^4.14.172",
     "@types/memory-cache": "^0.2.1",
