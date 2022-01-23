@@ -22,6 +22,7 @@ jobs:
         run: >
           docker run 
           --name bearwallet 
+          -p 3001:3000
           -e NOTION_KEY="${{ secrets.NOTION_KEY }}" 
           -e NOTION_WALLET_ID="${{ secrets.NOTION_WALLET_ID }}" 
           -e SECRET_COOKIE_EXPIRES_DAYS="${{ secrets.SECRET_COOKIE_EXPIRES_DAYS }}" 
