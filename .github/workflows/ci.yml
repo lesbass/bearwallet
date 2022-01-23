@@ -1,0 +1,34 @@
+---
+name: ci
+
+on:
+  push:
+    branches:
+      - '**'
+    tags:
+      - "*.*.*"
+
+jobs:
+  Deploy-to-docker:
+    runs-on: self-hosted
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Build
+        run: docker build -t bearwallet .
+      - name: Stop old instance
+        run: docker rm --force bearwallet
+      - name: Deploy
+        run: >
+          docker run 
+          --name bearwallet 
+          -e NOTION_KEY="${{ secrets.NOTION_KEY }}" 
+          -e NOTION_WALLET_ID="${{ secrets.NOTION_WALLET_ID }}" 
+          -e SECRET_COOKIE_EXPIRES_DAYS="${{ secrets.SECRET_COOKIE_EXPIRES_DAYS }}" 
+          -e SECRET_COOKIE_NAME="${{ secrets.SECRET_COOKIE_NAME }}" 
+          -e SECRET_COOKIE_PASSWORD="${{ secrets.SECRET_COOKIE_PASSWORD }}" 
+          -e TELEGRAM_API_KEY="${{ secrets.TELEGRAM_API_KEY }}" 
+          --restart unless-stopped -d 
+          bearwallet
+      - name: Clean up
+        run: docker rmi $(docker images -f "dangling=true" -q)
