@@ -1,17 +1,12 @@
-ifneq (,$(wildcard ./.env.local))
-    include .env.local
-    export
-endif
-
 build:
-	docker-compose build bearwallet
+	docker-compose --env-file=.env.local build bearwallet
 
 run:
-	docker-compose up -d
+	docker-compose --env-file=.env.local up -d
 	open http://localhost:3001
 
 stop:
-	docker-compose down
+	docker-compose --env-file=.env.local down
 
 deploy:
-	docker-compose up --build --force-recreate -d
+	docker-compose --env-file=.env.local up --build --force-recreate -d

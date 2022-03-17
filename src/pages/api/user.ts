@@ -18,7 +18,7 @@ export default withSessionRoute(async (req, res) => {
       })
     }
   } catch (error) {
-    log('ERROR', error.message, 'api.user')
-    res.status(500).send('Generic error: ' + error.message)
+    log('ERROR', (error as Error).message, 'api.user')
+    res.status(500).send('Generic error: ' + (error as Error).message)
   }
 })

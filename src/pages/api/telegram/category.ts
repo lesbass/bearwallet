@@ -26,7 +26,7 @@ const category = async (request: NextApiRequest, response: NextApiResponse) => {
       response.status(405).send('')
     }
   } catch (error) {
-    log('ERROR', error.message, 'telegram.getCategories')
+    log('ERROR', (error as Error).message, 'telegram.getCategories')
     response.status(500).send('Generic error')
   }
 }

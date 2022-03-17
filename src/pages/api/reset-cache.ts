@@ -20,7 +20,7 @@ export default withSessionRoute((request, response) => {
       response.status(405).send('')
     }
   } catch (error) {
-    log('ERROR', error.message, 'api.resetCache')
+    log('ERROR', (error as Error).message, 'api.resetCache')
     response.status(500).send('Generic error')
   }
 })

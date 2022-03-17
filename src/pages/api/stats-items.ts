@@ -37,7 +37,7 @@ export default withSessionRoute(async (request, response) => {
       response.status(405).send('')
     }
   } catch (error) {
-    log('ERROR', error.message, 'api.statsItems')
+    log('ERROR', (error as Error).message, 'api.statsItems')
     response.status(500).send('Generic error')
   }
 })
