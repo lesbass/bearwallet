@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  bearwallet:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000"
+    environment:
+      NOTION_KEY: ${NOTION_KEY}
+      NOTION_WALLET_ID: ${NOTION_WALLET_ID}
+      SECRET_COOKIE_EXPIRES_DAYS: ${SECRET_COOKIE_EXPIRES_DAYS}
+      SECRET_COOKIE_NAME: ${SECRET_COOKIE_NAME}
+      SECRET_COOKIE_PASSWORD: ${SECRET_COOKIE_PASSWORD}
+      TELEGRAM_API_KEY: ${TELEGRAM_API_KEY}
+    restart: unless-stopped
